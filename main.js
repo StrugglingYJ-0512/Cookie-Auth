@@ -11,6 +11,22 @@ var app = http.createServer(function (request, response) {
   var _url = request.url;
   var queryData = url.parse(_url, true).query;
   var pathname = url.parse(_url, true).pathname;
+  //소유자 체크, login 되었는지 상태 체크
+  var isOwner = false;
+  var cookies = {};
+  // 쿠키값이 있는 경우만 실행.
+  if (request.headers.cookie) {
+    //request.headers.cookie 를 접근 가능.
+    //but, 이것은 그냥 text 상태이기에, 사용하기 위해서는 가공해야 한다!!
+    // 가공을 위해, cookie 모듈을 사용한다.
+    // cookie.parse로 parsing 한다!! (분석 & 가공)
+    cookies = cookie.parse(request.headers.cookie);
+  }
+  if (cookies.email === "lydo7413" && cookies.password === "111111") {
+    isOwner = true;
+  }
+  console.log(isOwner);
+
   if (pathname === "/") {
     if (queryData.id === undefined) {
       fs.readdir("./data", function (error, filelist) {
