@@ -1,12 +1,20 @@
 var http = require("http");
+var cookie = require("cookie");
+
 http
   .createServer(function (request, response) {
-    // 2개의 쿠키값을 전송한다.
+    console.log(request.headers.cookie);
+    var cookies = {};
+    if (request.headers.cookie !== undefined) {
+      cookies = cookie.parse("request.headers.cookie");
+    }
+    console.log(cookies.yummy_cookie);
     response.writeHead(200, {
-      //   // 응답하는 메시지를 전송.
-      //   // 200;  성공했다.
-      //   // 2번째 인자로는 객체가 들어오기로 약속됨. 이 안에 key value의 형식으로 넣어줌.
-      "Set-Cookie": ["yummy_cookie = choco", "tasty_cookie = strawberry"],
+      "Set-Cookie": [
+        "yummy_cookie = choco",
+        "tasty_cookie = strawberry",
+        "Permanent=cookies; Max-Age=${60*60*24*30}",
+      ],
     });
     response.end("Cookie!!");
   })
