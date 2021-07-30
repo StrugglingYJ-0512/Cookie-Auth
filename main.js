@@ -166,6 +166,28 @@ var app = http.createServer(function (request, response) {
       response.writeHead(200);
       response.end(html);
     });
+  } else if (pathname === "/login_process") {
+    var body = "";
+    request.on("data", function (data) {
+      body = body + data;
+    });
+    request.on("end", function () {
+      var post = qs.parse(body); // post 안에 담긴 사용자의 email & password
+      if (post.email === "lydo7413@naver.com" && post.password === "111111") {
+        // 쿠키생성
+        response.writeHead(302, {
+          "Set-Cookie": [
+            `email : ${post.email} `,
+            `password = ${post.password} `,
+            `nickname = YJ`,
+          ],
+          Location: `/`,
+        });
+        response.end();
+      } else {
+        response.end("WHO?");
+      }
+    });
   } else {
     response.writeHead(404);
     response.end("Not found");
