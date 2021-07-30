@@ -7,11 +7,7 @@ var path = require("path");
 var sanitizeHtml = require("sanitize-html");
 var cookie = require("cookie");
 
-var app = http.createServer(function (request, response) {
-  var _url = request.url;
-  var queryData = url.parse(_url, true).query;
-  var pathname = url.parse(_url, true).pathname;
-  //소유자 체크, login 되었는지 상태 체크
+function authIsOwner(request, response) {
   var isOwner = false;
   var cookies = {};
   // 쿠키값이 있는 경우만 실행.
@@ -25,8 +21,17 @@ var app = http.createServer(function (request, response) {
   if (cookies.email === "lydo7413" && cookies.password === "111111") {
     isOwner = true;
   }
-  console.log(isOwner);
+  // console.log(isOwner);
+  return isOwner;
+}
 
+var app = http.createServer(function (request, response) {
+  var _url = request.url;
+  var queryData = url.parse(_url, true).query;
+  var pathname = url.parse(_url, true).pathname;
+  //소유자 체크, login 되었는지 상태 체크
+  var isOwner = authIsOwner(request, response);
+  console.log(isOwner);
   if (pathname === "/") {
     if (queryData.id === undefined) {
       fs.readdir("./data", function (error, filelist) {
