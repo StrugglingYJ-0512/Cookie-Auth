@@ -15,6 +15,8 @@ http
         `Permanent=cookies; Max-Age=${60 * 60 * 24 * 30}`,
         "Secure=Secure; Secure", // 해설>> 일반적인) 쿠키의 이름=값; [진짜 중요한 부분!!]
         "HttpOnly=HttpOnly; HttpOnly",
+        "Path=Path; Path=/cookie",
+        "Domain=Domain; Domain=o2.org",
       ],
     });
     response.end("Cookie!!");
